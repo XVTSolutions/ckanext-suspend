@@ -35,6 +35,9 @@ class SuspendController(BaseController):
             
             #update necessary fields
             pkg_dict['type'] = 'dataset-suspended'
+#             if 'extras' not in pkg_dict:
+#                 pkg_dict['extras'] = []
+#             pkg_dict['extras'].append({ 'key' :'suspend_reason', 'value' : ckan.plugins.toolkit.request.params.getone('suspend_reason') })
             pkg_dict['suspend_reason'] = ckan.plugins.toolkit.request.params.getone('suspend_reason')
                         
             #update...

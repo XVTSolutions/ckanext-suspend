@@ -62,14 +62,11 @@ class SuspendPlugin(plugins.SingletonPlugin, tk.DefaultDatasetForm):
 
     def show_package_schema(self):
         schema = super(SuspendPlugin, self).show_package_schema()
+        
+        schema['tags']['__extras'].append(tk.get_converter('free_tags_only'))
 
         schema.update({
             'suspend_reason': [tk.get_converter('convert_from_extras'),
-                tk.get_validator('ignore_missing')]
-            })
-
-        schema.update({
-            'suspended': [tk.get_converter('convert_from_extras'),
                 tk.get_validator('ignore_missing')]
             })
 
