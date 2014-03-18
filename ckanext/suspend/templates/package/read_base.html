@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% block content_action %}
+  {{ super() }}
+  {% if h.check_access('package_unsuspend', {'id':pkg.id}) and pkg.get('type') == 'dataset-suspended' %}
+  	
+  	{% set locale = h.dump_json({'content': _('Are you sure you want to unsuspend this dataset?')}) %}
+	<a class="btn" href="/unsuspend/{{ pkg.name }}" data-module="confirm-action" data-module-i18n="{{ locale }}"><i class="icon-unlock"></i>{{ _('Unsuspend') }}</a>
+    
+  {% endif %}
+{% endblock %}

@@ -6,7 +6,8 @@ from ckan.logic import auth_sysadmins_check
 @auth_sysadmins_check
 def _package_update(context, data_dict=None):
     package = logic_auth.get_package_object(context, data_dict)
-    if (not package.type == 'dataset-suspended'):
+    no_type_check = context['no_type_check'] if 'no_type_check' in context else False
+    if (no_type_check) or (not package.type == 'dataset-suspended'):
         return logic_auth.update.package_update(context, data_dict)
     else:
         return {'success': False, 'msg': 'Not allowed to update suspended packages'}
@@ -29,6 +30,10 @@ class SuspendPlugin(plugins.SingletonPlugin, tk.DefaultDatasetForm):
         map.connect('suspend', '/suspend/{id}',
             controller='ckanext.suspend.controller:SuspendController',
             action='index')
+        
+        map.connect('suspend', '/unsuspend/{id}',
+            controller='ckanext.suspend.controller:SuspendController',
+            action='unsuspend')
 
         return map
     
@@ -97,4 +102,4 @@ class SuspendPlugin(plugins.SingletonPlugin, tk.DefaultDatasetForm):
 
 
     def get_auth_functions(self):
-        return {'package_update': _package_update}
+        return {'package_update': _package_update, 'package_unsuspend': logic_auth.update.package_update}

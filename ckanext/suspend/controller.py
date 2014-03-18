@@ -84,3 +84,34 @@ class SuspendController(BaseController):
                     }
     
             return plugins.toolkit.render("suspend/index.html", extra_vars = vars)
+        
+    def unsuspend(self, id):
+        
+        context = {
+                   'user': plugins.toolkit.c.user or plugins.toolkit.c.author,
+                   'auth_user_obj': plugins.toolkit.c.userobj,
+                   'no_type_check': True
+                   }
+        data_dict = {'id': id}
+        
+        if ckan.plugins.toolkit.request.method == 'POST':
+            try:
+                plugins.toolkit.check_access('package_update', context, data_dict)
+            except plugins.toolkit.NotAuthorized:
+                plugins.toolkit.abort(401, plugins.toolkit._('Unauthorized to update a package'))
+                
+            #get current package...
+            pkg_dict = plugins.toolkit.get_action('package_show')(None, data_dict)
+            
+            #update necessary fields
+            pkg_dict['type'] = 'dataset'     
+            if 'suspend_reason' in pkg_dict:
+                del pkg_dict['suspend_reason']
+                        
+            #update...
+            plugins.toolkit.get_action('package_update')(context, pkg_dict)
+
+            ckan.plugins.toolkit.redirect_to(controller="package", action="read", id=pkg_dict['name'])
+        else :
+    
+            ckan.plugins.toolkit.redirect_to(controller="package", action="read", id=id)
