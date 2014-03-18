@@ -38,7 +38,21 @@ class SuspendController(BaseController):
 #             if 'extras' not in pkg_dict:
 #                 pkg_dict['extras'] = []
 #             pkg_dict['extras'].append({ 'key' :'suspend_reason', 'value' : ckan.plugins.toolkit.request.params.getone('suspend_reason') })
-            pkg_dict['suspend_reason'] = ckan.plugins.toolkit.request.params.getone('suspend_reason')
+
+            reason = ckan.plugins.toolkit.request.params.getone('suspend_reason')
+            if reason is None or reason == '':
+                vars = {
+                    'errors': { 'suspend_reason' : [ plugins.toolkit._('Reason to suspend dataset is required') ] },
+                    'data': { 
+                             'suspend_reason' : reason
+                             }
+                    }
+    
+                plugins.toolkit.c.pkg_dict = pkg_dict
+                plugins.toolkit.c.pkg = context['package']
+                return plugins.toolkit.render("suspend/index.html", extra_vars = vars)
+        
+            pkg_dict['suspend_reason'] = reason
                         
             #update...
             plugins.toolkit.get_action('package_update')(context, pkg_dict)
