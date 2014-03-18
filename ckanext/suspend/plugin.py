@@ -1,8 +1,9 @@
 import ckan.logic.auth as logic_auth
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
+from ckan.logic import auth_sysadmins_check
 
-
+@auth_sysadmins_check
 def _package_update(context, data_dict=None):
     package = logic_auth.get_package_object(context, data_dict)
     if (not package.type == 'dataset-suspended'):
