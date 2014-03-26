@@ -9,7 +9,7 @@
           {{ _('Private') }}
         </span>
       {% endif %}
-      {% if package.type == 'dataset-suspended' %}
+      {% if 'suspended' in package.state %}
         <span class="dataset-private label label-inverse" style="background:#ce5555">
           <i class="icon-lock"></i>
           {{ _('Suspended') }}

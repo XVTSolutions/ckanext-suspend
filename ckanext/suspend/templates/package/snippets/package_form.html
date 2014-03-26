@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
  {% block delete_button %}
-   {% if h.check_access('package_update', {'id': data.id}) and not data.type == 'dataset-suspended' %}
+   {% if h.check_access('package_update', {'id': data.id}) and 'suspended' not in data.state %}
 	 	<a class="btn btn-danger pull-left" style="margin-right: 1em;" href="/suspend/{{ data.name }}" data-module-i18n="{{ locale }}">{{ _('Suspend') }}</a>
 	{% endif %}
 	{% if h.check_access('package_delete', {'id': data.id}) and not data.state == 'deleted' %}

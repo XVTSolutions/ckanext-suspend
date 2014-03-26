@@ -11,7 +11,7 @@ won't work. #}
 
 	{{ super() }}
 
-	{% if data.get('type') == 'dataset-suspended' %}
+	{% if 'suspended' in data.get('state') %}
   		{{ form.textarea('suspend_reason', label=_('Reason to suspend dataset'), id='field-suspend_reason', placeholder=_(''), value=data.suspend_reason, error=errors.suspend_reason, classes=['control-medium']) }}
 	{% endif %}
 {% endblock %}

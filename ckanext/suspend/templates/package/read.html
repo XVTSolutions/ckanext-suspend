@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
   {% block package_description %}
-  	{% if pkg.type == 'dataset-suspended' %}
+  	{% if 'suspended' in pkg.state %}
       <span class="dataset-private label label-inverse pull-right" style="margin-left: 0.5em; background:#ce5555">
         <i class="icon-lock"></i>
         {{ _('Suspended') }}

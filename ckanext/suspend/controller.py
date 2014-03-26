@@ -3,6 +3,7 @@ import ckan.lib.helpers as h
 import ckan.plugins as plugins
 from ckan.lib.base import BaseController
 from ckan.lib.helpers import flash_error, flash_success, flash_notice
+from model import add_package_suspend, delete_package_suspend
 
 class SuspendController(BaseController):
     """
@@ -33,12 +34,7 @@ class SuspendController(BaseController):
             #get current package...
             pkg_dict = plugins.toolkit.get_action('package_show')(None, data_dict)
             
-            #update necessary fields
-            pkg_dict['type'] = 'dataset-suspended'
-#             if 'extras' not in pkg_dict:
-#                 pkg_dict['extras'] = []
-#             pkg_dict['extras'].append({ 'key' :'suspend_reason', 'value' : ckan.plugins.toolkit.request.params.getone('suspend_reason') })
-
+            #validate
             reason = ckan.plugins.toolkit.request.params.getone('suspend_reason')
             if reason is None or reason == '':
                 vars = {
@@ -51,9 +47,14 @@ class SuspendController(BaseController):
                 plugins.toolkit.c.pkg_dict = pkg_dict
                 plugins.toolkit.c.pkg = context['package']
                 return plugins.toolkit.render("suspend/index.html", extra_vars = vars)
+            
+            #update necessary fields
+            #pkg_dict['state'] += 'suspended'
+            pkg_dict['state'] = 'suspended'
         
-            pkg_dict['suspend_reason'] = reason
-                        
+            #add package suspend
+            add_package_suspend(ckan.model.Session, pkg_dict['id'], reason)
+                                    
             #update...
             plugins.toolkit.get_action('package_update')(context, pkg_dict)
 
@@ -104,9 +105,9 @@ class SuspendController(BaseController):
             pkg_dict = plugins.toolkit.get_action('package_show')(None, data_dict)
             
             #update necessary fields
-            pkg_dict['type'] = 'dataset'     
-            if 'suspend_reason' in pkg_dict:
-                del pkg_dict['suspend_reason']
+            #pkg_dict['state'] =  pkg_dict['state'].replace('suspended', '')  
+            pkg_dict['state'] = 'active'
+            delete_package_suspend(ckan.model.Session, pkg_dict['id'])
                         
             #update...
             plugins.toolkit.get_action('package_update')(context, pkg_dict)

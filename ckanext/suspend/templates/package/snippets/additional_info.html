@@ -1,0 +1,13 @@
+{% ckan_extends %}
+      
+{% block package_additional_info %}
+	{{ super() }}
+	
+   	{% if 'suspended' in pkg_dict.state %}
+	<tr>
+		<th scope="row" class="dataset-label">{{ _('Reason for Suspension') }}</th>
+		<td class="dataset-details"> {{ pkg_dict.suspend_reason }}</td>
+	</tr>
+	{% endif %}
+
+{% endblock %}
