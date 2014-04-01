@@ -4,7 +4,7 @@ from ckan.model.meta import metadata
 
 package_suspend_table = Table('package_suspend', metadata,
         Column('package_id', types.UnicodeText, ForeignKey('package.id'), primary_key=True),
-        Column('reason', types.String),
+        Column('reason', types.UnicodeText),
     )
 
 class PackageSuspend(object):

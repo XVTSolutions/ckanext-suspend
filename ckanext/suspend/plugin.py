@@ -62,7 +62,7 @@ class SuspendPlugin(plugins.SingletonPlugin):
     def before_search(self, search_params):
         
         if not '+state:' in search_params['fq']:
-            search_params['fq'] = "{fq}  +state:(active OR activesuspended)".format(fq=search_params['fq'])
+            search_params['fq'] = "{fq}  +state:(active OR suspended)".format(fq=search_params['fq'])
         
         return search_params
         
