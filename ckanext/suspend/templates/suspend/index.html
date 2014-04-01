@@ -8,7 +8,7 @@
   
 	<form class="dataset-form form-horizontal" method="post">
 		
-		{{ form.textarea('suspend_reason', id='field-suspend_reason', label=_('Reason to suspend dataset'), placeholder=_(''), value=data.suspend_reason, error=errors.suspend_reason) }}
+		{{ form.textarea('suspend_reason', id='field-suspend_reason', label=_('Reason to suspend dataset'), placeholder=_('Enter a reason'), value=data.suspend_reason, error=errors.suspend_reason) }}
 
 		<div class="form-actions">
     		<input type="submit" class="btn btn-primary" value="{{ _('Suspend') }}" />
