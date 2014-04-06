@@ -1,6 +1,8 @@
 {% ckan_extends %}
 
 {% block package_item_content %}
+{% set truncate_notes = truncate_notes or 80 %}
+{% set notes = h.markdown_wrap(package.notes, extract_length=truncate_notes) if h.markdown_wrap(package.notes, extract_length=truncate_notes)|length else h.markdown_extract(package.notes, extract_length=truncate_notes) %}
   <div class="dataset-content">
     <h3 class="dataset-heading">
       {% if package.private %}
